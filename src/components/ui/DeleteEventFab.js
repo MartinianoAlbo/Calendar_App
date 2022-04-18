@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { eventDeleted } from '../../actions/events';
+import Swal from 'sweetalert2';
+import { eventStartDelete } from '../../actions/events';
 
 
 export const DeleteEventFab = () => {
@@ -8,7 +9,23 @@ export const DeleteEventFab = () => {
     const {activeEvent} = useSelector((state) => state.calendar)
 
     const handleClickDelete = () => {
-        dispatch(eventDeleted())
+      
+        Swal.fire({
+            title: 'Estas seguro/a?',
+            text: "La nota se eliminara permanentemente!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, eliminar!'
+            }).then((result) => {
+            if (result.value) {
+                dispatch(eventStartDelete(activeEvent))
+            }else {
+              return
+            }
+        })
+        
     }
     
   return (

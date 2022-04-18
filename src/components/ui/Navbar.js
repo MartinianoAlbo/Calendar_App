@@ -1,6 +1,32 @@
+import { useSelector, useDispatch } from "react-redux"
+import Swal from "sweetalert2"
+import { startLogout } from "../../actions/auth"
 
 export const Navbar = () => {
+
+  const dispatch = useDispatch()
+  const {name} = useSelector((state) => state.AUTH)
+
+  const handleLogout = (e) => {
+    e.preventDefault()
+    Swal.fire({
+      title: 'Cerrar Sesion',
+      text: "confirma para cerrar sesion",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#1A71BF',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Ok',
+      cancelButtonText: 'No'
+      }).then((result) => {
+      if (result.value) {
+        dispatch(startLogout())
+      }else {
+        return
+      }
+  })
   
+  }
 
   return (
     <nav className="bg-gray-800">
@@ -56,6 +82,7 @@ export const Navbar = () => {
                 alt="Workflow"
               /> */}
               <i className="fa fa-calendar-day"></i>
+              <h1 className="m-2">Agenda de {name}</h1>
             </div>
             {/* <div className="hidden sm:block sm:ml-6">
               <div className="flex space-x-4">
@@ -101,6 +128,7 @@ export const Navbar = () => {
                   id="user-menu-button"
                   aria-expanded="false"
                   aria-haspopup="true"
+                  onClick={handleLogout}
                 > 
                 <i className='fas fa-sign-out-alt mx-1'></i>
                 {' '}

@@ -4,9 +4,9 @@ import Modal from 'react-modal'
 import moment from 'moment'
 import { uiCloseModal } from '../../actions/ui'
 import {
-  eventAddNew,
   eventClearActiveEvent,
-  eventUpdated,
+  eventStartAddNew,
+  eventStartUpdate
 } from '../../actions/events'
 import DateTimePicker from 'react-datetime-picker'
 import Swal from 'sweetalert2'
@@ -109,13 +109,25 @@ export const CalendarModal = () => {
     }    
 
     if (activeEvent) {
-      dispatch(eventUpdated(formValues))
+      Swal.fire({
+        title: 'Estas seguro/a?',
+        text: "La nota no se podra revertir",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#298701',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Modificar'
+        }).then((result) => {
+        if (result.value) {
+          dispatch(eventStartUpdate(formValues))
+        }else {
+          return
+        }
+    })
+      
     } else {
       dispatch(
-        eventAddNew({
-          ...formValues,
-          id: new Date().getTime(),
-        }),
+        eventStartAddNew(formValues),
       )
     }
 
